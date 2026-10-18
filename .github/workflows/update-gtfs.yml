@@ -25,7 +25,7 @@ jobs:
         run: pnpm install
 
       - name: Download - Parse - Upload
-        working-director: './'
+        working-directory: './'
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           R2_ACCESS_KEY: ${{ secrets.R2_ACCESS_KEY }}
