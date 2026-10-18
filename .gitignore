@@ -1,0 +1,7 @@
+/target
+.vercel
+.env*.local
+.idea
+.DS_Store
+node_modules
+*.tsbuildinfo
