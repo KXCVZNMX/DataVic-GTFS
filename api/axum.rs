@@ -1,20 +1,37 @@
-use axum::{
-    Router,
-    routing::{get, post},
-};
+mod trams;
+mod types;
+
+use crate::types::AppState;
+use axum::response::IntoResponse;
+use axum::{Json, Router, routing::get};
+use redis::aio::ConnectionManager;
+use serde_json::json;
+use std::sync::Arc;
 use tower::ServiceBuilder;
 use vercel_runtime::Error;
 use vercel_runtime::axum::VercelLayer;
 
+async fn health() -> impl IntoResponse {
+    Json(json!({ "status": "ok" }))
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let router = Router::new();
+    let redis_url = std::env::var("REDIS_URL").expect("Redis URL not set");
+    let redis_client = redis::Client::open(redis_url.as_str())?;
+    let redis = ConnectionManager::new(redis_client).await?;
+
+    let state = AppState {
+        redis,
+    };
+
+    let router = Router::new()
+        .route("/api/health", get(health))
+        .merge(trams::router(state));
 
     // let router = Router::new()
-    //     .route("/", get(home))
-    //     .route("/stream", get(stream_example))
-    //     .route("/users", post(create_user))
-    //     .fallback(fallback);
+    //     .merge(routes::health::router())
+    //     .merge(routes::users::router());
 
     let app = ServiceBuilder::new()
         .layer(VercelLayer::new())

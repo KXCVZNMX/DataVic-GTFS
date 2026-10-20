@@ -1,6 +1,7 @@
 /target
 .vercel
-.env*.local
+.env.local
+.env
 .idea
 .DS_Store
 node_modules
