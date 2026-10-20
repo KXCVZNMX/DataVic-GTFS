@@ -1,10 +1,9 @@
 use crate::trams::service_alert::service_alert;
 use crate::trams::{trip_update::trip_updates, vehicle_position::vehicle_position};
-use crate::types::AppState;
 use axum::Router;
 use axum::routing::get;
+use crate::utils::types::AppState;
 
-mod fetcher;
 mod service_alert;
 mod trip_update;
 mod vehicle_position;

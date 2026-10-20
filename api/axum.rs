@@ -1,12 +1,11 @@
 mod trams;
-mod types;
+mod utils;
 
-use crate::types::AppState;
+use crate::utils::types::AppState;
 use axum::response::IntoResponse;
 use axum::{Json, Router, routing::get};
 use redis::aio::ConnectionManager;
 use serde_json::json;
-use std::sync::Arc;
 use tower::ServiceBuilder;
 use vercel_runtime::Error;
 use vercel_runtime::axum::VercelLayer;

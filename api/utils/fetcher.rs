@@ -1,6 +1,6 @@
 use redis::AsyncCommands;
 use base64::{engine::general_purpose::STANDARD, Engine};
-use crate::types::{gtfs_realtime::FeedMessage, ApiError, AppState, Snapshot, decode_feed_message};
+use crate::utils::types::{gtfs_realtime::FeedMessage, ApiError, AppState, Snapshot, decode_feed_message};
 
 pub async fn fetch_redis(state: &mut AppState, key: &str) -> Result<FeedMessage, ApiError> {
     let resp: Option<String> = state

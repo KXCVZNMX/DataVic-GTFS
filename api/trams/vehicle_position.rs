@@ -1,8 +1,7 @@
-use crate::trams::fetcher::fetch_redis;
-use crate::types::{ApiError, AppState, protobuf_response};
+use crate::utils::fetcher::fetch_redis;
+use crate::utils::types::{ApiError, AppState, protobuf_response};
 use axum::extract::State;
 use axum::response::Response;
-use prost::Message;
 
 const VEHICLE_POSITION_URL: &str = "https://api.opendata.transport.vic.gov.au/opendata/public-transport/gtfs/realtime/v1/tram/vehicle-positions";
 const VP_CACHE_KEY: &str = "gtfs:trams:vehicle-position";
