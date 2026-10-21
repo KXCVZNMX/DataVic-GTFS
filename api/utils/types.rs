@@ -80,3 +80,14 @@ pub mod gtfs_realtime {
 pub fn decode_feed_message(bytes: &[u8]) -> Result<gtfs_realtime::FeedMessage, ApiError> {
     gtfs_realtime::FeedMessage::decode(bytes).map_err(|_| ApiError::InvalidProtobuf)
 }
+
+#[derive(Serialize)]
+pub struct VehiclePosition {
+    pub(crate) entity_id: String,
+    pub(crate) vehicle_id: Option<String>,
+    pub(crate) trip_id: Option<String>,
+    pub(crate) p_lat: f32,
+    pub(crate) p_lng: f32,
+    pub(crate) p_speed: Option<f32>,
+    pub(crate) time: Option<u64>
+}
