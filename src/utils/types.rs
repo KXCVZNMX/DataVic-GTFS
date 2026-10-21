@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone)]
 pub struct AppState {
-    pub(crate) redis: ConnectionManager,
+    pub redis: ConnectionManager,
 }
 
 #[derive(Debug)]

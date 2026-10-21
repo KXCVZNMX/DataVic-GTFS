@@ -1,7 +1,3 @@
-mod trams;
-mod utils;
-
-use crate::utils::types::AppState;
 use axum::response::IntoResponse;
 use axum::{Json, Router, routing::get};
 use axum::http::Uri;
@@ -10,6 +6,8 @@ use serde_json::json;
 use tower::ServiceBuilder;
 use vercel_runtime::Error;
 use vercel_runtime::axum::VercelLayer;
+use pt_backend::trams;
+use pt_backend::utils::types::AppState;
 
 async fn health() -> impl IntoResponse {
     Json(json!({ "status": "ok" }))
