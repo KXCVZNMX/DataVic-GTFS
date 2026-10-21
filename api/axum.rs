@@ -4,6 +4,7 @@ mod utils;
 use crate::utils::types::AppState;
 use axum::response::IntoResponse;
 use axum::{Json, Router, routing::get};
+use axum::http::Uri;
 use redis::aio::ConnectionManager;
 use serde_json::json;
 use tower::ServiceBuilder;
@@ -26,7 +27,8 @@ async fn main() -> Result<(), Error> {
 
     let router = Router::new()
         .route("/api/health", get(health))
-        .merge(trams::router(state));
+        .merge(trams::router(state))
+        .fallback(|uri: Uri| async move { format!("saw: {uri}") });
 
     // let router = Router::new()
     //     .merge(routes::health::router())
