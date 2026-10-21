@@ -1,5 +1,5 @@
 use crate::utils::types::gtfs_realtime::FeedMessage;
-use crate::utils::types::{StopTimeEvent, TripUpdate, Trip, VehiclePosition, TripInformation};
+use crate::utils::types::{StopTimeEvent, TripUpdate, Trip, VehiclePosition, TripInformation, ServiceAlert};
 
 fn parse_trip_id(tid: &str) -> TripInformation {
     let mut parts = tid.split('-');
@@ -82,4 +82,30 @@ pub fn parse_trip_updates(feed: &FeedMessage) -> Vec<TripUpdate> {
     }
 
     tus
+}
+
+pub fn parse_service_alert(feed: &FeedMessage) -> Vec<ServiceAlert> {
+    let mut v = Vec::new();
+
+    for entity in &feed.entity {
+        if let Some(alert) = &entity.alert {
+            println!("alert effect={:?}", alert.effect);
+            println!("header={:?}", alert.header_text);
+
+            v.push( ServiceAlert {
+                effect: alert.effect,
+                header: if let Some(ref ht) = alert.header_text {
+                    if let Some(text) = ht.translation.first() {
+                        Some(text.text.clone())
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                }
+            })
+        }
+    }
+
+    v
 }

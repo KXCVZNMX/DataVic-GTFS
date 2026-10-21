@@ -4,6 +4,7 @@ use prost::Message;
 use redis::aio::ConnectionManager;
 use redis::RedisError;
 use serde::{Deserialize, Serialize};
+use crate::utils::types::gtfs_realtime::TranslatedString;
 
 #[derive(Clone)]
 pub struct AppState {
@@ -125,4 +126,10 @@ pub struct Trip {
 #[derive(Serialize)]
 pub struct TripUpdate {
     pub(crate) trips: Vec<Trip>,
+}
+
+#[derive(Serialize)]
+pub struct ServiceAlert {
+    pub(crate) effect: Option<i32>,
+    pub(crate) header: Option<String>
 }
