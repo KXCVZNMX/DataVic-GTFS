@@ -91,3 +91,31 @@ pub struct VehiclePosition {
     pub(crate) p_speed: Option<f32>,
     pub(crate) time: Option<u64>
 }
+
+#[derive(Serialize)]
+pub struct StopTimeEvent {
+    pub(crate) delay: Option<i32>,
+    pub(crate) time: Option<i64>,
+}
+
+impl From<gtfs_realtime::trip_update::StopTimeEvent> for StopTimeEvent {
+    fn from(value: gtfs_realtime::trip_update::StopTimeEvent) -> Self {
+        StopTimeEvent {
+            delay: value.delay,
+            time: value.time,
+        }
+    }
+}
+
+#[derive(Serialize)]
+pub struct Trip {
+    pub(crate) trip_id: Option<String>,
+    pub(crate) stop_id: Option<String>,
+    pub(crate) arrival: Option<StopTimeEvent>,
+    pub(crate) departure: Option<StopTimeEvent>
+}
+
+#[derive(Serialize)]
+pub struct TripUpdate {
+    pub(crate) trips: Vec<Trip>,
+}
