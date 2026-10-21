@@ -1,5 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "builds": [
+    {
+      "src": "api/axum.rs",
+      "use": "@vercel/rust"
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",

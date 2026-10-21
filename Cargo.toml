@@ -2,7 +2,7 @@
 name = "pt_backend"
 version = "0.1.0"
 edition = "2024"
-build="api/build.rs"
+build="src/build.rs"
 
 [dependencies]
 axum = "0.8.9"
