@@ -85,7 +85,7 @@ pub fn decode_feed_message(bytes: &[u8]) -> Result<gtfs_realtime::FeedMessage, A
 pub struct VehiclePosition {
     pub(crate) entity_id: String,
     pub(crate) vehicle_id: Option<String>,
-    pub(crate) trip_id: Option<String>,
+    pub(crate) trip_id: Option<TripInformation>,
     pub(crate) p_lat: f32,
     pub(crate) p_lng: f32,
     pub(crate) p_speed: Option<f32>,
@@ -108,8 +108,15 @@ impl From<gtfs_realtime::trip_update::StopTimeEvent> for StopTimeEvent {
 }
 
 #[derive(Serialize)]
+pub struct TripInformation {
+    pub(crate) route_type: String,
+    pub(crate) route_id: String,
+    pub(crate) timetable_type: String,
+}
+
+#[derive(Serialize)]
 pub struct Trip {
-    pub(crate) trip_id: Option<String>,
+    pub(crate) trip_id: Option<TripInformation>,
     pub(crate) stop_id: Option<String>,
     pub(crate) arrival: Option<StopTimeEvent>,
     pub(crate) departure: Option<StopTimeEvent>

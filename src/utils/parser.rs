@@ -1,5 +1,20 @@
 use crate::utils::types::gtfs_realtime::FeedMessage;
-use crate::utils::types::{StopTimeEvent, TripUpdate, Trip, VehiclePosition};
+use crate::utils::types::{StopTimeEvent, TripUpdate, Trip, VehiclePosition, TripInformation};
+
+fn parse_trip_id(tid: &str) -> TripInformation {
+    let mut parts = tid.split('-');
+    let route_type = parts.next().unwrap().to_owned();
+    let route_id = parts.next().unwrap().to_owned();
+    let _ = parts.next(); // Empty field
+    let _ = parts.next(); // Discard
+    let timetable_type = parts.next().unwrap().to_owned();
+
+    TripInformation {
+        route_type,
+        route_id,
+        timetable_type
+    }
+}
 
 pub fn parse_vehicle_positions(feed: &FeedMessage) -> Vec<VehiclePosition> {
     let mut v = Vec::new();
@@ -30,7 +45,7 @@ pub fn parse_vehicle_positions(feed: &FeedMessage) -> Vec<VehiclePosition> {
         v.push( VehiclePosition {
                 entity_id: entity.id.clone(),
                 vehicle_id: if let Some(vid) = vehicle_id { Some(vid.to_owned()) } else { None },
-                trip_id: if let Some(tid) = trip_id { Some(tid.to_owned()) } else { None },
+                trip_id: if let Some(tid) = trip_id { Some(parse_trip_id(tid)) } else { None },
                 p_lat: position.latitude,
                 p_lng: position.longitude,
                 p_speed: position.speed,
@@ -53,7 +68,7 @@ pub fn parse_trip_updates(feed: &FeedMessage) -> Vec<TripUpdate> {
 
             for stop_update in &update.stop_time_update {
                 trips.push( Trip {
-                    trip_id: if let Some(tid) = trip_id { Some(tid.to_owned()) } else { None },
+                    trip_id: if let Some(tid) = trip_id { Some(parse_trip_id(tid)) } else { None },
                     stop_id: stop_update.stop_id.clone(),
                     arrival: if let Some(arr) = stop_update.arrival { Some(StopTimeEvent::from(arr)) } else { None },
                     departure: if let Some(dep) = stop_update.departure { Some(StopTimeEvent::from(dep)) } else { None },
