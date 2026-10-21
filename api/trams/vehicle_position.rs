@@ -5,7 +5,6 @@ use axum::extract::State;
 use axum::Json;
 use axum::response::{IntoResponse, Response};
 
-const VEHICLE_POSITION_URL: &str = "https://api.opendata.transport.vic.gov.au/opendata/public-transport/gtfs/realtime/v1/tram/vehicle-positions";
 const VP_CACHE_KEY: &str = "gtfs:realtime:tram:vehicle_positions";
 
 pub async fn vehicle_position(State(mut state): State<AppState>) -> Result<Response, ApiError> {
