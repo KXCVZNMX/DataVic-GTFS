@@ -20,6 +20,7 @@ base64 = "0.23.1"
 
 [build-dependencies]
 prost-build = "0.14"
+protoc-bin-vendored = "3.3.0"
 
 [[bin]]
 name = "axum"
