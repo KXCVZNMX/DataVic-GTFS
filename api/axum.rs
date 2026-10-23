@@ -1,23 +1,11 @@
-use axum::response::IntoResponse;
-use axum::{Json, Router, routing::get};
-use axum::http::{HeaderMap, Uri};
-use axum_governor::{nz, GovernorConfigBuilder, PeerIp, Quota, GovernorLayer};
+use axum::{Router, http::Uri, middleware};
+use pt_backend::rate_limit::rate_limit;
+use pt_backend::trams;
+use pt_backend::utils::types::AppState;
 use redis::aio::ConnectionManager;
-use serde_json::json;
 use tower::ServiceBuilder;
 use vercel_runtime::Error;
 use vercel_runtime::axum::VercelLayer;
-use pt_backend::trams;
-use pt_backend::utils::types::AppState;
-
-async fn health(headers: HeaderMap) -> Json<serde_json::Value> {
-    let ip = headers
-        .get("x-real-ip")
-        .and_then(|v| v.to_str().ok())
-        .unwrap_or("unknown");
-
-    Json(json!({ "ip": ip }))
-}
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -25,21 +13,12 @@ async fn main() -> Result<(), Error> {
     let redis_client = redis::Client::open(redis_url.as_str())?;
     let redis = ConnectionManager::new(redis_client).await?;
 
-    let state = AppState {
-        redis,
-    };
-
-    let cfg = GovernorConfigBuilder::default()
-        .with_extractor(PeerIp::default())
-        .expect_connect_info()
-        .quota_default(Quota::requests_per_minute(nz!(24u32)))
-        .finish()?;
+    let state = AppState { redis };
 
     let router = Router::new()
-        .route("/api/health", get(health))
-        .merge(trams::router(state))
+        .merge(trams::router(state.clone()))
         .fallback(|uri: Uri| async move { format!("saw: {uri}") })
-        .layer(GovernorLayer::new(cfg));
+        .layer(middleware::from_fn_with_state(state.clone(), rate_limit));
 
     // let router = Router::new()
     //     .merge(routes::health::router())
