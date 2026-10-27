@@ -83,6 +83,7 @@ pub fn decode_feed_message(bytes: &[u8]) -> Result<gtfs_realtime::FeedMessage, A
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct VehiclePosition {
     pub(crate) entity_id: String,
     pub(crate) vehicle_id: Option<String>,
@@ -94,6 +95,7 @@ pub struct VehiclePosition {
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct StopTimeEvent {
     pub(crate) delay: Option<i32>,
     pub(crate) time: Option<i64>,
@@ -109,6 +111,7 @@ impl From<gtfs_realtime::trip_update::StopTimeEvent> for StopTimeEvent {
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct TripInformation {
     pub(crate) route_type: String,
     pub(crate) route_id: String,
@@ -116,6 +119,7 @@ pub struct TripInformation {
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Trip {
     pub(crate) trip_info: Option<TripInformation>,
     pub(crate) trip_id: Option<String>,
@@ -125,11 +129,13 @@ pub struct Trip {
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct TripUpdate {
     pub(crate) trips: Vec<Trip>,
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct ServiceAlert {
     pub(crate) effect: Option<i32>,
     pub(crate) header: Option<String>
