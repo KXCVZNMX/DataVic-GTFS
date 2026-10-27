@@ -68,7 +68,8 @@ pub fn parse_trip_updates(feed: &FeedMessage) -> Vec<TripUpdate> {
 
             for stop_update in &update.stop_time_update {
                 trips.push( Trip {
-                    trip_id: if let Some(tid) = trip_id { Some(parse_trip_id(tid)) } else { None },
+                    trip_info: if let Some(ref tid) = trip_id { Some(parse_trip_id(tid)) } else { None },
+                    trip_id: if let Some(tid) = trip_id { Some(String::from(tid)) } else { None },
                     stop_id: stop_update.stop_id.clone(),
                     arrival: if let Some(arr) = stop_update.arrival { Some(StopTimeEvent::from(arr)) } else { None },
                     departure: if let Some(dep) = stop_update.departure { Some(StopTimeEvent::from(dep)) } else { None },

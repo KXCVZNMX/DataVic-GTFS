@@ -117,7 +117,8 @@ pub struct TripInformation {
 
 #[derive(Serialize)]
 pub struct Trip {
-    pub(crate) trip_id: Option<TripInformation>,
+    pub(crate) trip_info: Option<TripInformation>,
+    pub(crate) trip_id: Option<String>,
     pub(crate) stop_id: Option<String>,
     pub(crate) arrival: Option<StopTimeEvent>,
     pub(crate) departure: Option<StopTimeEvent>
